@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package>
+  <name>motor_control</name>
+  <version>0.0.0</version>
+  <description>The motor_control package</description>
+
+  <maintainer email="jkerfs@calpoly.edu">jkerfs</maintainer>
+  <author email="jkerfs@calpoly.edu">jkerfs</author>
+
+  <license>MIT</license>
+  <url type="website">https://developer.nvidia.com/embedded/develop/hardware</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <run_depend>geometry_msgs</run_depend>
+  <run_depend>roscpp</run_depend>
+  <export>
+
+  </export>
+</package>

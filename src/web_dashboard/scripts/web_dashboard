@@ -1,0 +1,6 @@
+#! /usr/bin/env python
+
+import web_dashboard.server
+
+if __name__ == '__main__':
+	web_dashboard.server.init()

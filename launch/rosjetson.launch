@@ -1,0 +1,42 @@
+<launch>
+
+  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
+
+  <node pkg="cv_camera" type="cv_camera_node" name="cv_camera">
+    <param name="image_width" value="160"/>
+    <param name="image_height" value="120"/>
+    <param name="rate" value="30"/>
+  </node>
+
+  <node pkg="joy" type="joy_node" name="joy_node">
+    <param name="dev" value="/dev/input/js0" />
+    <param name="deadzone" value="0.3" />
+    <param name="autorepeat_rate" value="20" />
+  </node>
+
+  <node pkg="teleop_twist_joy" name="teleop_twist_joy" type="teleop_node">
+    <param name="axis_linear" value="5" />
+    <param name="axis_angular" value="4" />
+    <param name="scale_linear" value="1" />
+    <param name="scale_angular" value="1" /> 
+  </node>
+
+  <node pkg="web_video_server" name="web_video_server" type="web_video_server">
+  </node>
+
+  <node pkg="rosserial_python" name="serial_node" type="serial_node.py">
+     <param name="port" value="/dev/ttyACM0" />
+  </node>
+
+  <node pkg="motor_control" name="motor_control" type="motor_control">
+    <param name="max_speed" value="300" />
+  </node>
+
+
+  <node pkg="web_dashboard" name="web_dashboard" type="web_dashboard">
+  </node>
+
+  <node pkg="data_recorder" name="data_recorder" type="data_recorder">
+  </node>
+ 
+</launch>
