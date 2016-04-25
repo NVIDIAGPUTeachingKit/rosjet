@@ -52,16 +52,21 @@
     name: '/data_recorder/save_image',
     serviceType : 'std_srvs/Empty'
   });
-
+$("#stop-button").click(function() {
+  var stop_motor = new ROSLIB.Message({
+      data: 0
+  });
+  left_motor.publish(stop_motor);
+  right_motor.publish(stop_motor);
+});
 
 $("#forward-button").click(function() {
   var motor_control = new ROSLIB.Message({
-      data: -1 * Number($("#speed").val())
+      data: Number($("#speed").val())
   });
   var stop_motor = new ROSLIB.Message({
       data: 0
   });
-  console.log($("#speed").val());
   left_motor.publish(motor_control);
   right_motor.publish(motor_control);
   window.setTimeout(function() {
@@ -72,7 +77,7 @@ $("#forward-button").click(function() {
 
 $("#reverse-button").click(function() {
   var motor_control = new ROSLIB.Message({
-      data: Number($("#speed").val())
+      data: -1 * Number($("#speed").val())
   });
   var stop_motor = new ROSLIB.Message({
       data: 0

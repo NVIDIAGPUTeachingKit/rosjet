@@ -85,8 +85,6 @@ bool DataRecorder::saveImageCB(std_srvs::Empty::Request &req, std_srvs::Empty::R
 bool DataRecorder::startRecordingCB(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res)
 {
   recording = true;
-  dataFile.close();
-  dataFile.clear();
   string dataFilename = directory + "data_" + to_string(record_count) + ".csv";
   string vidFilename = directory + "vid_" + to_string(record_count) + ".avi";
   dataFile.open(dataFilename.c_str());
