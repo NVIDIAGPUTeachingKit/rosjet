@@ -37,9 +37,11 @@ MotorController::MotorController()
 
   ros::Rate r(10);
   while(ros::ok()) {
-    if(last_vel++ == 5) {
+    if(last_vel++ >= 5) {
       left_msg.data = 0;
       right_msg.data = 0;
+      motor_left_pub.publish(left_msg);
+      motor_right_pub.publish(right_msg);
     }
     ros::spinOnce();
     r.sleep();
