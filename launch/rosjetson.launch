@@ -29,7 +29,7 @@
   </node>
 
   <node pkg="motor_control" name="motor_control" type="motor_control">
-    <param name="max_speed" value="300" />
+    <param name="max_speed" value="100" />
   </node>
 
 

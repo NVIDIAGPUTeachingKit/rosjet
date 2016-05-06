@@ -100,11 +100,11 @@
           <form>
             <fieldset class="form-group">
               <label for="speed" class="control-label">Speed (0 to 400)</label>
-                <input type="number" class="form-control" id="speed" value="250">
+                <input type="number" class="form-control" id="speed" value="100" min=1 max=400>
             </fieldset>
             <fieldset class="form-group">
               <label for="duration" class="control-label">Duration (in ms)</label>
-                <input type="number" class="form-control" id="duration" value="400">
+                <input type="number" class="form-control" id="duration" value="400" min=10 max=500>
             </fieldset>
             <fieldset class="form-group hidden-xs">
               <label for="vid-source" class="control-label">Video Source</label>

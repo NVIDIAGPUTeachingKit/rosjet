@@ -20,16 +20,23 @@
   /*
    * Topics
    */
-  var left_motor = new ROSLIB.Topic({
-    ros : ros,
-    name : '/arduino/motor_left_speed',
-    messageType : 'std_msgs/Int16'
+  var cmdVel = new ROSLIB.Topic({
+    ros: ros,
+    name : '/cmd_vel',
+    messageType: 'geometry_msgs/Twist'
   });
 
-  var right_motor = new ROSLIB.Topic({
-    ros : ros,
-    name : '/arduino/motor_right_speed',
-    messageType : 'std_msgs/Int16'
+  var twist = new ROSLIB.Message({
+    linear: {
+	x : 0.0,
+	y : 0.0,
+        z : 0.0
+    },
+    angular: {
+        x : 0.0,
+        y : 0.0,
+        z : 0.0
+    }
   });
 
   /*
@@ -52,72 +59,50 @@
     name: '/data_recorder/save_image',
     serviceType : 'std_srvs/Empty'
   });
-
+$("#stop-button").click(function() {
+  twist.linear.x = 0.0;
+  twist.angular.z = 0.0;
+  cmdVel.publish(twist);
+  console.log(twist);
+});
 
 $("#forward-button").click(function() {
-  var motor_control = new ROSLIB.Message({
-      data: -1 * Number($("#speed").val())
-  });
-  var stop_motor = new ROSLIB.Message({
-      data: 0
-  });
-  console.log($("#speed").val());
-  left_motor.publish(motor_control);
-  right_motor.publish(motor_control);
+  twist.linear.x = -Number($("#speed").val()) / 100;
+  twist.angular.z = 0.0;
+  cmdVel.publish(twist);
   window.setTimeout(function() {
-    left_motor.publish(stop_motor);
-    right_motor.publish(stop_motor);
+    twist.linear.x = 0.0;
+    cmdVel.publish(twist);
   }, $("#duration").val());
 });
 
 $("#reverse-button").click(function() {
-  var motor_control = new ROSLIB.Message({
-      data: Number($("#speed").val())
-  });
-  var stop_motor = new ROSLIB.Message({
-      data: 0
-  });
-  left_motor.publish(motor_control);
-  right_motor.publish(motor_control);
+  twist.linear.x = Number($("#speed").val()) / 100;
+  twist.angular.z = 0.0;
+  cmdVel.publish(twist);
   window.setTimeout(function() {
-    left_motor.publish(stop_motor);
-    right_motor.publish(stop_motor);
+    twist.linear.x = 0.0;
+    cmdVel.publish(twist);
   }, $("#duration").val());
 });
 
 $("#left-button").click(function() {
-  var motor_left = new ROSLIB.Message({
-      data: Math.floor(0.75 * Number($("#speed").val()))
-  });
-  var motor_right = new ROSLIB.Message({
-      data: Math.floor(-0.75 * Number($("#speed").val()))
-  });
-  var stop_motor = new ROSLIB.Message({
-      data: 0
-  });
-  left_motor.publish(motor_left);
-  right_motor.publish(motor_right);
+  twist.linear.x = 0.0;
+  twist.angular.z = Number($("#speed").val()) / 100;
+  cmdVel.publish(twist);
   window.setTimeout(function() {
-    left_motor.publish(stop_motor);
-    right_motor.publish(stop_motor);
+    twist.angular.z = 0.0;
+    cmdVel.publish(twist);
   }, $("#duration").val());
 });
 
 $("#right-button").click(function() {
-  var motor_left = new ROSLIB.Message({
-      data: Math.floor(-0.75 * Number($("#speed").val()))
-  });
-  var motor_right = new ROSLIB.Message({
-      data: Math.floor(0.75 * Number($("#speed").val()))
-  });
-  var stop_motor = new ROSLIB.Message({
-      data: 0
-  });
-  left_motor.publish(motor_left);
-  right_motor.publish(motor_right);
+  twist.linear.x = 0.0;
+  twist.angular.z = -Number($("#speed").val()) / 100;
+  cmdVel.publish(twist);
   window.setTimeout(function() {
-    left_motor.publish(stop_motor);
-    right_motor.publish(stop_motor);
+    twist.angular.z = 0.0;
+    cmdVel.publish(twist);
   }, $("#duration").val());
 });
 
