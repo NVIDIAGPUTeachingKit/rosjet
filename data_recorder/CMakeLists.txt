@@ -12,6 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   message_filters
 )
 
+find_package(OpenCV REQUIRED)
 
 set(CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS}")
 
@@ -136,10 +137,7 @@ include_directories(
 ## same as for the library above
 # add_dependencies(video_streamer_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
-## Specify libraries to link a library or executable target against
-# target_link_libraries(video_streamer_node
-#   ${catkin_LIBRARIES}
-# )
+
 
 #############
 ## Install ##
@@ -192,5 +190,5 @@ include_directories(
 include_directories(include ${catkin_INCLUDE_DIRS})
 
 add_executable(data_recorder src/data_recorder.cpp)
-target_link_libraries(data_recorder ${catkin_LIBRARIES})
+target_link_libraries(data_recorder ${catkin_LIBRARIES} ${OpenCV_LIBS})
 add_dependencies(data_recorder camera_calibration_parsers camera_info_manager image_transport message_filters )
