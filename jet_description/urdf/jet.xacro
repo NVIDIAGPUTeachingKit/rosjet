@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+<robot name="Jet" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Import all Gazebo-customization elements, including Gazebo colors -->
+  <xacro:include filename="$(find jet_description)/urdf/jet.gazebo"/>
+  <!-- Import Rviz colors -->
+  <xacro:include filename="$(find jet_description)/urdf/materials.xacro"/>
+
+  <link name="base_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size=".25 .35 .05"/>
+      </geometry>
+      <material name="green">
+        <color rgba="0 .8 .0 .8"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size=".25 .35 .05"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="10"/>
+      <inertia ixx="5e-3" ixy="0.0" ixz="0.0" iyy="5e-3" iyz="0.0" izz="5e-3"/>
+    </inertial>
+
+    <collision name='caster_collision'>
+      <origin rpy="0 0 0" xyz="0 .15 -.06"/>
+      <geometry>
+        <cylinder radius="0.03" length="0.12"/>
+      </geometry>
+
+      <surface>
+        <friction>
+          <ode>
+            <mu>0</mu>
+            <mu2>0</mu2>
+            <slip1>1.0</slip1>
+            <slip2>1.0</slip2>
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+
+    <visual name='caster_visual'>
+      <origin rpy="0 0 0" xyz="0 .15 -.06"/>
+      <geometry>
+        <cylinder radius="0.03" length="0.12"/>
+      </geometry>
+    </visual>
+
+  </link>
+
+  <link name="right_wheel">
+    <visual>
+      <geometry>
+        <cylinder length="0.03" radius="0.1"/>
+      </geometry>
+      <origin rpy="0 1.57075 0" xyz="0 0 0"/>
+      <material name="gray">
+        <color rgba=".1 .1 .1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.03" radius="0.1"/>
+      </geometry>
+      <origin rpy="0 1.57075 0" xyz="0 0 0"/>
+    </collision>
+    <inertial>
+      <mass value="10"/>
+      <inertia ixx="1e-3" ixy="0.0" ixz="0.0" iyy="1e-3" iyz="0.0" izz="1e-3"/>
+    </inertial>
+  </link>
+
+  <link name="left_wheel">
+    <visual>
+      <geometry>
+        <cylinder length="0.03" radius="0.1"/>
+      </geometry>
+      <origin rpy="0 1.57075 0" xyz="0 0 0"/>
+      <material name="gray">
+        <color rgba=".1 .1 .1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.03" radius="0.1"/>
+      </geometry>
+      <origin rpy="0 1.57075 0" xyz="0 0 0"/>
+    </collision>
+    <inertial>
+      <mass value="10"/>
+      <inertia ixx="1e-3" ixy="0.0" ixz="0.0" iyy="1e-3" iyz="0.0" izz="1e-3"/>
+    </inertial>
+  </link>
+
+  <joint name="base_to_right_wheel" type="continuous">
+    <parent link="base_link"/>
+    <child link="right_wheel"/>
+    <origin xyz="0.15 -.05 -.03"/>
+    <axis xyz="1 0 0"/>
+  </joint>
+
+  <joint name="base_to_left_wheel" type="continuous">
+    <parent link="base_link"/>
+    <child link="left_wheel"/>
+    <origin xyz="-0.15 -.05 -.03"/>
+    <axis xyz="1 0 0"/>
+  </joint>
+
+  <transmission name="tran_left_wheel">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base_to_right_wheel">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_right">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran_right_wheel">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base_to_left_wheel">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_left">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+</robot>

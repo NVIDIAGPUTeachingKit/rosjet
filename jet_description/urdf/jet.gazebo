@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<robot>
+
+<gazebo>
+  <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    <robotNamespace>/jetrobot</robotNamespace>
+    <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+  </plugin>
+  <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+    <alwaysOn>true</alwaysOn>
+    <updateRate>50</updateRate>
+    <leftJoint>base_to_left_wheel</leftJoint>
+    <rightJoint>base_to_right_wheel</rightJoint>
+    <wheelSeparation>0.3</wheelSeparation>
+    <wheelDiameter>0.2</wheelDiameter>
+    <torque>20</torque>
+    <commandTopic>cmd_vel</commandTopic>
+    <odometryTopic>odom</odometryTopic>
+    <odometryFrame>odom</odometryFrame>
+    <robotBaseFrame>base_link</robotBaseFrame>
+  </plugin>
+</gazebo>
+
+  <gazebo reference="base_link">
+    <material>Gazebo/Green</material>
+  </gazebo>
+  <gazebo reference="right_wheel">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+  <gazebo reference="left_wheel">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+</robot>
