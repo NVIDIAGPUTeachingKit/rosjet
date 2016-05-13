@@ -1,5 +1,5 @@
-#include "DualVNH5019MotorShield/DualVNH5019MotorShield.h"
-#include "NewPing/NewPing.h"
+#include "DualVNH5019MotorShield.h"
+#include "NewPing.h"
 #include <ros.h>
 #include <std_msgs/String.h>
 #include <std_msgs/Empty.h>
