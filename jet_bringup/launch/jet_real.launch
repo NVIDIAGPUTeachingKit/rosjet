@@ -1,7 +1,8 @@
 <launch>
 
   <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
-
+  <include file="$(find jet_arduino)/launch/jet_arduino.launch" />
+  
   <node pkg="cv_camera" type="cv_camera_node" name="cv_camera">
     <param name="image_width" value="160"/>
     <param name="image_height" value="120"/>
@@ -18,15 +19,12 @@
     <param name="axis_linear" value="5" />
     <param name="axis_angular" value="4" />
     <param name="scale_linear" value="1" />
-    <param name="scale_angular" value="1" /> 
+    <param name="scale_angular" value="1" />
   </node>
 
   <node pkg="web_video_server" name="web_video_server" type="web_video_server">
   </node>
 
-  <node pkg="rosserial_python" name="serial_node" type="serial_node.py">
-     <param name="port" value="/dev/ttyACM0" />
-  </node>
 
   <node pkg="motor_control" name="motor_control" type="motor_control">
     <param name="max_speed" value="100" />
@@ -38,5 +36,5 @@
 
   <node pkg="data_recorder" name="data_recorder" type="data_recorder">
   </node>
- 
+
 </launch>

@@ -4,6 +4,8 @@
 #include <std_msgs/String.h>
 #include <std_msgs/Empty.h>
 #include <std_msgs/Int16.h>
+#include <geometry_msgs/Twist.h>
+#include "Wire.h"
 
 /*
  * CONSTANTS
@@ -23,6 +25,10 @@
 //Encoder Constants
 #define ENCODER_INTERVAL 20
 
+//Accel/Gyro Constants
+#define MPU_ADDR 0x68
+#define MPU_INTERVAL 50
+
 /*
  * GLOBAL VARIABLES
  */
@@ -30,7 +36,7 @@
 //Sonar
 unsigned long pingTimer[SONAR_NUM]; // Holds the times when the next ping should happen for each sensor.
 unsigned int cm[SONAR_NUM];         // Where the ping distances are stored.
-uint8_t currentSensor = 0;          // Keeps track of which sensor is active.\
+uint8_t currentSensor = 0;          // Keeps track of which sensor is active.
 
 NewPing sonar[SONAR_NUM] = {     // Sensor object array.
   NewPing(53, 51, MAX_DISTANCE), // Each sensor's trigger pin, echo pin, and max distance to ping.
@@ -68,6 +74,13 @@ std_msgs::Int16 encoder_left_value, encoder_right_value;
 ros::Publisher encoder_left_pub("arduino/encoder_left_value", &encoder_left_value);
 ros::Publisher encoder_right_pub("arduino/encoder_right_value", &encoder_right_value);
 
+//Accel/Gyro Values
+int16_t Tmp;
+unsigned long mpuTimer;
+geometry_msgs::Twist accel;
+geometry_msgs::Twist gyro;
+ros::Publisher accel_pub("arduino/accel", &accel);
+ros::Publisher gyro_pub("arduino/gyro", &gyro);
 
 /*
  * CALLBACKS
@@ -97,6 +110,21 @@ void encoder_right_cb() {
   encoder_right_value.data++;
 }
 
+void readMPU() {
+    Wire.beginTransmission(MPU_ADDR);
+    Wire.write(0x3B);  // starting with register 0x3B (ACCEL_XOUT_H)
+    Wire.endTransmission(false);
+    Wire.requestFrom(MPU_ADDR,14,true);  // request a total of 14 registers
+    accel.linear.x = Wire.read()<<8|Wire.read();  // 0x3B (ACCEL_XOUT_H) & 0x3C (ACCEL_XOUT_L)     
+    accel.linear.y = Wire.read()<<8|Wire.read();  // 0x3D (ACCEL_YOUT_H) & 0x3E (ACCEL_YOUT_L)
+    accel.linear.z = Wire.read()<<8|Wire.read();  // 0x3F (ACCEL_ZOUT_H) & 0x40 (ACCEL_ZOUT_L)
+    Tmp = Wire.read()<<8|Wire.read();  // 0x41 (TEMP_OUT_H) & 0x42 (TEMP_OUT_L)
+    gyro.angular.x = Wire.read()<<8|Wire.read();  // 0x43 (GYRO_XOUT_H) & 0x44 (GYRO_XOUT_L)
+    gyro.angular.y = Wire.read()<<8|Wire.read();  // 0x45 (GYRO_YOUT_H) & 0x46 (GYRO_YOUT_L)
+    gyro.angular.z = Wire.read()<<8|Wire.read();  // 0x47 (GYRO_ZOUT_H) & 0x48 (GYRO_ZOUT_L)
+    gyro_pub.publish(&gyro);
+    accel_pub.publish(&accel);
+}
 void setup() {
   md.init();
   nh.initNode();
@@ -110,6 +138,9 @@ void setup() {
   nh.advertise(encoder_left_pub);
   nh.advertise(encoder_right_pub);
   
+  nh.advertise(accel_pub);
+  nh.advertise(gyro_pub);
+  
   for(uint8_t i = 0; i < SONAR_NUM; i++) {
     nh.advertise(sonar_pub[i]);
   }
@@ -122,11 +153,19 @@ void setup() {
   for (uint8_t i = 1; i < SONAR_NUM; i++) // Set the starting time for each sensor.
     pingTimer[i] = pingTimer[i - 1] + PING_INTERVAL;
     
+  mpuTimer = millis() + 90;
+  
   attachInterrupt(5, encoder_left_cb, RISING); //digital pin 18
   attachInterrupt(4, encoder_right_cb, RISING); //digital pin 19
   
   encoder_left_value.data = 0;
   encoder_right_value.data = 0;
+  
+  Wire.begin();
+  Wire.beginTransmission(MPU_ADDR);
+  Wire.write(0x6B);  // PWR_MGMT_1 register
+  Wire.write(0);     // set to zero (wakes up the MPU-6050)
+  Wire.endTransmission(true);
 }
 
 void loop() {  
@@ -158,6 +197,10 @@ void loop() {
     encoder_right_value.data = 0;
     encoderTimer += ENCODER_INTERVAL;
   }
-    
+   
+  if (millis() >= mpuTimer) {
+      readMPU();
+      mpuTimer += MPU_INTERVAL;
+  }
   nh.spinOnce();
 }
