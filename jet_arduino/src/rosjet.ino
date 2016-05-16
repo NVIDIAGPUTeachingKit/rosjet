@@ -4,6 +4,7 @@
 #include <std_msgs/String.h>
 #include <std_msgs/Empty.h>
 #include <std_msgs/Int16.h>
+#include <std_msgs/UInt64.h>
 #include <geometry_msgs/Twist.h>
 #include "Wire.h"
 
@@ -70,7 +71,7 @@ ros::NodeHandle  nh;
 
 //Encoders
 unsigned long encoderTimer;
-std_msgs::Int16 encoder_left_value, encoder_right_value;
+std_msgs::UInt64 encoder_left_value, encoder_right_value;
 ros::Publisher encoder_left_pub("arduino/encoder_left_value", &encoder_left_value);
 ros::Publisher encoder_right_pub("arduino/encoder_right_value", &encoder_right_value);
 
@@ -193,8 +194,6 @@ void loop() {
   if (millis() >= encoderTimer) {
     encoder_left_pub.publish(&encoder_left_value);
     encoder_right_pub.publish(&encoder_right_value);
-    encoder_left_value.data = 0;
-    encoder_right_value.data = 0;
     encoderTimer += ENCODER_INTERVAL;
   }
    
