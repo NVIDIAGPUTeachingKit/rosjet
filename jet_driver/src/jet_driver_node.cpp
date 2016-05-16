@@ -3,11 +3,15 @@
 #include <hardware_interface/joint_command_interface.h>
 #include <hardware_interface/joint_state_interface.h>
 #include <hardware_interface/robot_hw.h>
+#include <std_msgs/Int16.h>
+
+#define TICKS_PER_REVOLUTION 300
+#define REVOLUTIONS_PER_TICK .0033333333333
 
 class JetRobot : public hardware_interface::RobotHW
 {
 public:
-  JetRobot() 
+  JetRobot(ros::NodeHandle nh) 
   { 
     hardware_interface::JointStateHandle state_handle_left("left_wheel_joint", &pos[0], &vel[0], &eff[0]);
     jnt_state_interface.registerHandle(state_handle_left);
@@ -24,9 +28,34 @@ public:
     jnt_vel_interface.registerHandle(vel_handle_right);
 
     registerInterface(&jnt_vel_interface);
+
+    motor_left_pub = nh.advertise<std_msgs::Int16>("/arduino/motor_left_speed",10);
+    motor_right_pub = nh.advertise<std_msgs::Int16>("/arduino/motor_right_speed",10);
+    encoder_left_sub = nh.subscribe<std_msgs::Int16>("/arduino/encoder_left_value", 10, &JetRobot::leftEncoderCB, this);
+    encoder_right_sub = nh.subscribe<std_msgs::Int16>("/arduino/encoder_right_value", 10, &JetRobot::rightEncoderCB, this);
   }
   ros::Time getTime() const {return ros::Time::now();}
   ros::Duration getPeriod() const{return ros::Duration(0.01);}
+  void leftEncoderCB(const std_msgs::Int16::ConstPtr& val) {
+    encoder_left += val->data;
+  }
+  void rightEncoderCB(const std_msgs::Int16::ConstPtr& val) {
+    encoder_right += val->data;
+  }
+  void read() {
+    left_msg.data = (int)(400 * cmd[0]);
+    right_msg.data = (int)(400 * cmd[1]);
+    motor_left_pub.publish(left_msg);
+    motor_right_pub.publish(right_msg);
+  }
+  void write() {
+    vel[0] = REVOLUTIONS_PER_TICK * (encoder_left - prev_left) / getPeriod().toSec();
+    vel[1] = REVOLUTIONS_PER_TICK * (encoder_right - prev_right) / getPeriod().toSec();
+    pos[0] = REVOLUTIONS_PER_TICK * (encoder_left - prev_left);
+    pos[1] = REVOLUTIONS_PER_TICK * (encoder_right - prev_right);
+    prev_left = encoder_left;
+    prev_right = encoder_right;
+  }
 
 private:
   hardware_interface::VelocityJointInterface jnt_vel_interface;
@@ -35,6 +64,12 @@ private:
   double vel[2];
   double eff[2];
   double cmd[2];
+  std_msgs::Int16 left_msg, right_msg;
+  int encoder_left, encoder_right, prev_left, prev_right;
+  ros::Publisher motor_left_pub;
+  ros::Publisher motor_right_pub;
+  ros::Subscriber encoder_left_sub;
+  ros::Subscriber encoder_right_sub;
 };
 
 int main(int argc, char * argv[]) 
@@ -42,7 +77,7 @@ int main(int argc, char * argv[])
   ros::init(argc, argv, "jet_driver_node");
   ros::NodeHandle nh;
 
-  JetRobot jet;
+  JetRobot jet(nh);
   controller_manager::ControllerManager cm(&jet, nh);
 
   ros::Rate rate(1.0 / jet.getPeriod().toSec());
@@ -51,8 +86,8 @@ int main(int argc, char * argv[])
 
   while(ros::ok())
   {
-    //jet.read();
-    //jet.write();
+    jet.read();
+    jet.write();
     cm.update(jet.getTime(), jet.getPeriod());
     rate.sleep();
   }
