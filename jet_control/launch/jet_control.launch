@@ -5,12 +5,14 @@
 
   <!-- load the controllers -->
   <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
-    output="screen" ns="/jetrobot" args="joint_leftwheel_position_controller joint_rightwheel_position_controller joint_state_controller"/>
+    output="screen" args="jet_drive_controller joint_state_controller"/>
 
   <!-- convert joint states to TF transforms for rviz, etc -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
     respawn="false" output="screen">
-    <remap from="/joint_states" to="/jetrobot/joint_states" />
   </node>
+
+  <node name="cmdvel_relay" pkg="topic_tools" type="relay" args="cmd_vel jet_drive_controller/cmd_vel"/>
+  <node name="odom_relay" pkg="topic_tools" type="relay" args="jet_drive_controller/odom odom"/>
 
 </launch>

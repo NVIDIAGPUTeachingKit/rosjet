@@ -2,7 +2,8 @@
 
   <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
   <include file="$(find jet_arduino)/launch/jet_arduino.launch" />
-  
+
+  <!--  
   <node pkg="cv_camera" type="cv_camera_node" name="cv_camera">
     <param name="image_width" value="160"/>
     <param name="image_height" value="120"/>
@@ -34,7 +35,14 @@
   <node pkg="web_dashboard" name="web_dashboard" type="web_dashboard">
   </node>
 
+
   <node pkg="data_recorder" name="data_recorder" type="data_recorder">
   </node>
+-->
+   <include file="$(find jet_description)/launch/jet_upload.launch"/>
+
+   <include file="$(find jet_control)/launch/jet_control.launch"/>
+
+   <include file="$(find jet_driver)/launch/jet_driver.launch"/>
 
 </launch>

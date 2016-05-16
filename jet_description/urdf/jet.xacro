@@ -98,38 +98,40 @@
     </inertial>
   </link>
 
-  <joint name="base_to_right_wheel" type="continuous">
+  <joint name="right_wheel_joint" type="revolute">
     <parent link="base_link"/>
     <child link="right_wheel"/>
     <origin xyz="0.15 -.05 -.03"/>
     <axis xyz="1 0 0"/>
+    <limit effort="100" velocity="100.0" lower="-5000" upper="5000" />
   </joint>
 
-  <joint name="base_to_left_wheel" type="continuous">
+  <joint name="left_wheel_joint" type="revolute">
     <parent link="base_link"/>
     <child link="left_wheel"/>
     <origin xyz="-0.15 -.05 -.03"/>
     <axis xyz="1 0 0"/>
+    <limit effort="100" velocity="100.0" lower="-5000" upper="5000"/>
   </joint>
 
   <transmission name="tran_left_wheel">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="base_to_right_wheel">
-      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    <joint name="left_wheel_joint">
+      <hardwareInterface>VelocityJointInterface</hardwareInterface>
     </joint>
-    <actuator name="motor_right">
-      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    <actuator name="motor_left">
+      <hardwareInterface>VelocityJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
 
   <transmission name="tran_right_wheel">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="base_to_left_wheel">
-      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    <joint name="right_wheel_joint">
+      <hardwareInterface>VelocityJointInterface</hardwareInterface>
     </joint>
-    <actuator name="motor_left">
-      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    <actuator name="motor_right">
+      <hardwareInterface>VelocityJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
