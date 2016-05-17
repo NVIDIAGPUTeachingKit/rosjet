@@ -23,10 +23,18 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="10"/>
-      <inertia ixx="5e-3" ixy="0.0" ixz="0.0" iyy="5e-3" iyz="0.0" izz="5e-3"/>
+      <mass value="1"/>
+      <inertia ixx="1e-3" ixy="0.0" ixz="0.0" iyy="1e-3" iyz="0.0" izz="1e-3"/>
     </inertial>
+  </link>
 
+  <link name="caster">
+    <visual name='caster_visual'>
+      <origin rpy="0 0 0" xyz="0 .15 -.06"/>
+      <geometry>
+        <cylinder radius="0.03" length="0.12"/>
+      </geometry>
+    </visual>
     <collision name='caster_collision'>
       <origin rpy="0 0 0" xyz="0 .15 -.06"/>
       <geometry>
@@ -44,14 +52,10 @@
         </friction>
       </surface>
     </collision>
-
-    <visual name='caster_visual'>
-      <origin rpy="0 0 0" xyz="0 .15 -.06"/>
-      <geometry>
-        <cylinder radius="0.03" length="0.12"/>
-      </geometry>
-    </visual>
-
+    <inertial>
+      <mass value="10"/>
+      <inertia ixx=".01425" ixy="0.0" ixz="0.0" iyy=".01425" iyz="0.0" izz=".0045"/>
+    </inertial>
   </link>
 
   <link name="right_wheel">
@@ -71,7 +75,7 @@
       <origin rpy="0 1.57075 0" xyz="0 0 0"/>
     </collision>
     <inertial>
-      <mass value="10"/>
+      <mass value="1"/>
       <inertia ixx="1e-3" ixy="0.0" ixz="0.0" iyy="1e-3" iyz="0.0" izz="1e-3"/>
     </inertial>
   </link>
@@ -97,6 +101,13 @@
       <inertia ixx="1e-3" ixy="0.0" ixz="0.0" iyy="1e-3" iyz="0.0" izz="1e-3"/>
     </inertial>
   </link>
+
+  <joint name="caster_base_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="caster"/>
+    <origin xyz="0 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
 
   <joint name="right_wheel_joint" type="revolute">
     <parent link="base_link"/>

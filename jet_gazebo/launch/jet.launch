@@ -15,10 +15,6 @@
     <arg name="debug" value="false"/>
   </include>
 
-  <!-- send robot urdf to param server -->
-  <include file="$(find jet_description)/launch/jet_upload.launch">
-  </include>
-
   <!-- Spawn a robot into Gazebo -->
   <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model jet" />
 
