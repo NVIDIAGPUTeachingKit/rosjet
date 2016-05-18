@@ -102,18 +102,40 @@
     </inertial>
   </link>
 
+  <link name="sonar1_link">
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
 
+  <link name="sonar2_link">
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
+
+  <link name="sonar3_link">
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
 
   <link name="camera_link">
     <collision>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <origin xyz="0 0 0" rpy="0 0 -1.57075"/>
       <geometry>
         <box size=".05 .02 .05"/>
       </geometry>
     </collision>
 
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <origin xyz="0 0 0" rpy="0 0 -1.57075"/>
       <geometry>
         <box size=".05 .02 .05"/>
       </geometry>
@@ -128,6 +150,27 @@
       <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
     </inertial>
   </link>
+
+  <joint name="sonar1_joint" type="fixed">
+      <axis xyz="0 1 0" />
+      <origin xyz="-.1 -.15 -.05" rpy="0 0 -2.356125"/>
+      <parent link="base_link"/>
+      <child link="sonar1_link"/>
+  </joint>
+
+  <joint name="sonar2_joint" type="fixed">
+      <axis xyz="0 1 0" />
+      <origin xyz="0 -.15 -.05" rpy="0 0 -1.57075"/>
+      <parent link="base_link"/>
+      <child link="sonar2_link"/>
+  </joint>
+
+  <joint name="sonar3_joint" type="fixed">
+      <axis xyz="0 1 0" />
+      <origin xyz=".1 -.15 -.05" rpy="0 0 -.785375"/>
+      <parent link="base_link"/>
+      <child link="sonar3_link"/>
+  </joint>
 
   <joint name="camera_joint" type="fixed">
       <axis xyz="0 1 0" />
