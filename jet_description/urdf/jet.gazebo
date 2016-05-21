@@ -158,7 +158,7 @@
           <resolution>0.01</resolution>
         </range>
       </ray>
-      <plugin filename="libgazebo_ros_range.so" name="gazebo_ros_range2">
+      <plugin filename="libgazebo_ros_range.so" name="gazebo_ros_range3">
         <gaussianNoise>0.005</gaussianNoise>
         <alwaysOn>true</alwaysOn>
         <updateRate>5</updateRate>
@@ -168,6 +168,20 @@
         <radiation>ultrasound</radiation>
       </plugin>
     </sensor>
+  </gazebo>
+
+  <gazebo>
+
+    <plugin name="imu_controller" filename="libhector_gazebo_ros_imu.so">
+       <alwaysOn>true</alwaysOn>
+       <updateRate>50.0</updateRate>
+       <bodyName>gyro_link</bodyName>
+       <topicName>imu_data</topicName>
+       <gaussianNoise>2.89e-08</gaussianNoise>
+       <xyzOffsets>0 0 0</xyzOffsets>
+       <rpyOffsets>0 0 0</rpyOffsets>
+     </plugin>
+
   </gazebo>
 
 </robot>
