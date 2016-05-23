@@ -10,7 +10,7 @@
   <author email="jkerfs@calpoly.edu">Jeremy Kerfs</author>
   <maintainer email="jkerfs@calpoly.edu">Jeremy Kerfs</maintainer>
 
-  <license>BSD</license>
+  <license>MIT</license>
 
   <buildtool_depend>catkin</buildtool_depend>
   <run_depend>urdf</run_depend>
