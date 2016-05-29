@@ -1,7 +1,15 @@
+if [[ "$(uname -a)" =~ ^.*aarch64.*$ ]]; then
+  ISTX1=true
+else
+  ISTX1=false
+fi
 
-# Grinch Kernel
-cd ~/; git clone https://github.com/jetsonhacks/installGrinch.git
-cd installGrinch; ./installGrinch.sh
+# Install Grinch Kernel if Tk1
+if ! $ISTX1
+then
+  cd ~/; git clone https://github.com/jetsonhacks/installGrinch.git
+  cd installGrinch; ./installGrinch.sh
+fi
 
 #Ros Prerequisites
 sudo update-locale LANG=C LANGUAGE=C LC_ALL=C LC_MESSAGES=POSIX
@@ -15,6 +23,7 @@ sudo apt-get -y install ros-jade-ros-base
 #Python Dependencies
 sudo apt-get -y install python-rosdep python-dev python-pip python-rosinstall python-wstool
 
+sudo rosdep init
 rosdep update
 echo "source /opt/ros/jade/setup.bash" >> ~/.bashrc
 source ~/.bashrc
@@ -31,27 +40,18 @@ sudo apt-get -y install ros-jade-rospy-tutorials
 sudo apt-get -y install ros-jade-joy
 sudo apt-get -y install ros-jade-teleop-twist-joy
 sudo apt-get -y install ros-jade-roslint
-python-dev
-# Install Platformio for Arduino
-pip install -U platformio
+sudo apt-get -y install ros-jade-controller-manager
 
 #Build Arduino Ros libraries
-cd ~/catkin_ws/src/rosjet/jet_arduino/lib/;
+cd ~/catkin_ws/src/rosjet/jet_arduino/resources/lib/;
 rm -rf ros_lib
-source /opt/ros/jade/setup.bash
-rosrun rosserial_arduino make_libraries.py
+rosrun rosserial_arduino make_libraries.py .
 
 #Install Ros Opencv bindings from source
 cd ~/catkin_ws
 wstool init src
 wstool merge -t src src/rosjet/rosjet.rosinstall
 wstool update -t src
-
-# Caffe
-cd ~/
-git clone https://github.com/jetsonhacks/installCaffeJTX1.git
-cd ~/installCaffeJTX1
-./installCaffeCuDNN.sh
 
 # System Optimizations
 gsettings set org.gnome.settings-daemon.plugins.power button-power shutdown
@@ -66,3 +66,4 @@ gsettings set org.gnome.Vino disable-background true
 gsettings set org.gnome.Vino prompt-enabled false
 gsettings set org.gnome.Vino require-encryption false
 echo "alias sr='source ~/catkin_ws/devel/setup.bash'" >> ~/.bashrc
+
