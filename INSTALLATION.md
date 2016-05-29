@@ -65,11 +65,11 @@ Once the install is complete, you can go ahead and disconnect the micro USB cabl
 
 * Install git
 
-  `git clone https://github.com/jetsonhacks/installGrinch.git`
+  `sudo apt-get install git`
 
 * Make the ROS workspace directory
 
-  `mkdir -p catkin_ws/src; cd catkin_ws/src'`
+  `mkdir -p catkin_ws/src; cd catkin_ws/src`
 
 * Clone this repository into the workspace
 
@@ -77,6 +77,6 @@ Once the install is complete, you can go ahead and disconnect the micro USB cabl
 
 * Run the ros configuration script
 
-  `rosjet/rosjet_config.sh`
+  `rosjet/rosjet_install.sh`
 
 * Configuration of the Jetson is now complete; reboot the Jetson board before continuing.

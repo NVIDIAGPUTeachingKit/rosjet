@@ -43,6 +43,11 @@ sudo apt-get -y install ros-jade-roslint
 sudo apt-get -y install ros-jade-controller-manager
 sudo apt-get -y install ros-jade-camera-calibration-parsers
 
+# Configure Catkin Workspace
+source /opt/ros/jade/setup.bash
+cd ~/catkin_ws/src
+catkin_init_workspace
+
 #Build Arduino Ros libraries
 cd ~/catkin_ws/src/rosjet/jet_arduino/resources/lib/;
 rm -rf ros_lib
@@ -55,16 +60,19 @@ wstool merge -t src src/rosjet/rosjet.rosinstall
 wstool update -t src
 
 # System Optimizations
-gsettings set org.gnome.settings-daemon.plugins.power button-power shutdown
-gsettings set org.gnome.desktop.screensaver lock-enabled false
-sudo apt-get -y install compizconfig-settings-manager
-gsettings set org.gnome.desktop.interface enable-animations false
-gsettings set com.canonical.Unity.Lenses remote-content-search none
-timedatectl set-timezone America/Los_Angeles
-echo '[SeatDefaults]\\nautologin-user=ubuntu' > login_file; sudo mv login_file /etc/lightdm/lightdm.conf
-gsettings set org.gnome.Vino enabled true
-gsettings set org.gnome.Vino disable-background true
-gsettings set org.gnome.Vino prompt-enabled false
-gsettings set org.gnome.Vino require-encryption false
-echo "alias sr='source ~/catkin_ws/devel/setup.bash'" >> ~/.bashrc
-
+# Install Grinch Kernel if Tk1
+if ! $ISTX1
+then
+  gsettings set org.gnome.settings-daemon.plugins.power button-power shutdown
+  gsettings set org.gnome.desktop.screensaver lock-enabled false
+  sudo apt-get -y install compizconfig-settings-manager
+  gsettings set org.gnome.desktop.interface enable-animations false
+  gsettings set com.canonical.Unity.Lenses remote-content-search none
+  timedatectl set-timezone America/Los_Angeles
+  echo '[SeatDefaults]\\nautologin-user=ubuntu' > login_file; sudo mv login_file /etc/lightdm/lightdm.conf
+  gsettings set org.gnome.Vino enabled true
+  gsettings set org.gnome.Vino disable-background true
+  gsettings set org.gnome.Vino prompt-enabled false
+  gsettings set org.gnome.Vino require-encryption false
+  echo "alias sr='source ~/catkin_ws/devel/setup.bash'" >> ~/.bashrc
+fi
