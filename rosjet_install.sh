@@ -41,6 +41,7 @@ sudo apt-get -y install ros-jade-joy
 sudo apt-get -y install ros-jade-teleop-twist-joy
 sudo apt-get -y install ros-jade-roslint
 sudo apt-get -y install ros-jade-controller-manager
+sudo apt-get -y install ros-jade-camera-calibration-parsers
 
 #Build Arduino Ros libraries
 cd ~/catkin_ws/src/rosjet/jet_arduino/resources/lib/;
