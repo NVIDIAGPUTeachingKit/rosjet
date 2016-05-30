@@ -12,8 +12,8 @@
 class JetRobot : public hardware_interface::RobotHW
 {
 public:
-  JetRobot(ros::NodeHandle nh) 
-  { 
+  JetRobot(ros::NodeHandle nh)
+  {
     hardware_interface::JointStateHandle state_handle_left("left_wheel_joint", &pos[0], &vel[0], &eff[0]);
     jnt_state_interface.registerHandle(state_handle_left);
 
@@ -21,7 +21,7 @@ public:
     jnt_state_interface.registerHandle(state_handle_right);
 
     registerInterface(&jnt_state_interface);
- 
+
     hardware_interface::JointHandle vel_handle_left(jnt_state_interface.getHandle("left_wheel_joint"), &cmd[0]);
     jnt_vel_interface.registerHandle(vel_handle_left);
 
@@ -73,7 +73,7 @@ private:
   ros::Subscriber encoder_right_sub;
 };
 
-int main(int argc, char * argv[]) 
+int main(int argc, char * argv[])
 {
   ros::init(argc, argv, "jet_driver_node");
   ros::NodeHandle nh;

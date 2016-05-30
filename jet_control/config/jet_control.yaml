@@ -4,7 +4,7 @@ joint_state_controller:
   publish_rate: 50
 
   # Position Controllers ---------------------------------------
-diff_drive_controller:
+jet_drive_controller:
     #type: "icart_mini_controller/ICartMiniController"
     type        : "diff_drive_controller/DiffDriveController"
     left_wheel  : 'left_wheel_joint'

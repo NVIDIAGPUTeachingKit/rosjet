@@ -4,12 +4,6 @@
   <include file="$(find jet_arduino)/launch/jet_arduino.launch" />
 
   <!--
-  <node pkg="cv_camera" type="cv_camera_node" name="cv_camera">
-    <param name="image_width" value="160"/>
-    <param name="image_height" value="120"/>
-    <param name="rate" value="30"/>
-  </node>
-
   <node pkg="joy" type="joy_node" name="joy_node">
     <param name="dev" value="/dev/input/js0" />
     <param name="deadzone" value="0.3" />
@@ -23,22 +17,22 @@
     <param name="scale_angular" value="1" />
   </node>
 
-  <node pkg="web_video_server" name="web_video_server" type="web_video_server">
-  </node>
-
-
-  <node pkg="motor_control" name="motor_control" type="motor_control">
-    <param name="max_speed" value="100" />
-  </node>
-
-
   <node pkg="web_dashboard" name="web_dashboard" type="web_dashboard">
   </node>
-
 
   <node pkg="data_recorder" name="data_recorder" type="data_recorder">
   </node>
 -->
+
+  <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
+    <param name="video_device" value="/dev/video0" />
+    <param name="image_width" value="640" />
+    <param name="image_height" value="480" />
+    <param name="pixel_format" value="yuyv" />
+    <param name="camera_frame_id" value="usb_cam" />
+    <param name="io_method" value="mmap"/>
+  </node>
+
    <include file="$(find jet_description)/launch/jet_upload.launch"/>
 
    <include file="$(find jet_control)/launch/jet_control.launch"/>
