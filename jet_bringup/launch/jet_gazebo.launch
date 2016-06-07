@@ -1,9 +1,0 @@
-<launch>
-
-  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
-
-   <include file="$(find jet_description)/launch/jet_upload.launch"/>
-
-   <include file="$(find jet_control)/launch/jet_control.launch"/>
-
-</launch>

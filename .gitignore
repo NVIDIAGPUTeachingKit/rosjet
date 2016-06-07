@@ -1,4 +1,3 @@
-.build/
-/build
-/devel
-jet_arduino/resources/lib/ros_lib
+_site
+.sass-cache
+.jekyll-metadata

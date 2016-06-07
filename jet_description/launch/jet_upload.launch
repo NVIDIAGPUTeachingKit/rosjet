@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-<!-- Convert an xacro and put on parameter server -->
-<param name="robot_description"
-  command="$(find xacro)/xacro.py '$(find jet_description)/urdf/jet.xacro'" />
-
-</launch>
