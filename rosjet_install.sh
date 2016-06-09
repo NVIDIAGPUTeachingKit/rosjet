@@ -51,16 +51,26 @@ source /opt/ros/jade/setup.bash
 cd ~/catkin_ws/src
 catkin_init_workspace
 
-#Build Arduino Ros libraries
-cd ~/catkin_ws/src/rosjet/jet_arduino/resources/lib/;
-rm -rf ros_lib
-rosrun rosserial_arduino make_libraries.py .
-
 #Install Ros Opencv bindings from source
 cd ~/catkin_ws
 wstool init src
 wstool merge -t src src/rosjet/rosjet.rosinstall
 wstool update -t src
+
+#Install Caffe (https://gist.github.com/jetsonhacks/acf63b993b44e1fb9528)
+sudo add-apt-repository universe
+sudo apt-get update
+sudo apt-get install libprotobuf-dev protobuf-compiler gfortran \
+libboost-dev cmake libleveldb-dev libsnappy-dev \
+libboost-thread-dev libboost-system-dev \
+libatlas-base-dev libhdf5-serial-dev libgflags-dev \
+libgoogle-glog-dev liblmdb-dev -y
+sudo usermod -a -G video $USER
+cd ~/
+git clone https://github.com/BVLC/caffe.git
+cd caffe && git checkout dev
+cp Makefile.config.example Makefile.config
+make -j 4 all
 
 # System Optimizations
 gsettings set org.gnome.settings-daemon.plugins.power button-power shutdown

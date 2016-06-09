@@ -1,9 +1,8 @@
 <launch>
 
   <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
-  <include file="$(find jet_arduino)/launch/jet_arduino.launch" />
+  <include file="$(find jet_serial)/launch/jet_serial.launch" />
 
-  <!--
   <node pkg="joy" type="joy_node" name="joy_node">
     <param name="dev" value="/dev/input/js0" />
     <param name="deadzone" value="0.3" />
@@ -16,13 +15,6 @@
     <param name="scale_linear" value="1" />
     <param name="scale_angular" value="1" />
   </node>
-
-  <node pkg="web_dashboard" name="web_dashboard" type="web_dashboard">
-  </node>
-
-  <node pkg="data_recorder" name="data_recorder" type="data_recorder">
-  </node>
--->
 
   <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
     <param name="video_device" value="/dev/video0" />
