@@ -11,6 +11,9 @@ then
   cd installGrinch; ./installGrinch.sh
 fi
 
+#Configure time-zone
+sudo dpkg-reconfigure tzdata
+
 #Ros Prerequisites
 sudo update-locale LANG=C LANGUAGE=C LC_ALL=C LC_MESSAGES=POSIX
 sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu trusty main" > /etc/apt/sources.list.d/ros-latest.list'
@@ -45,6 +48,8 @@ sudo apt-get -y install ros-jade-camera-calibration-parsers
 sudo apt-get -y install ros-jade-xacro
 sudo apt-get -y install ros-jade-robot-state-publisher
 sudo apt-get -y install ros-jade-diff-drive-controller
+sudo apt-get -y install ros-jade-usb-cam
+sudo apt-get -y install ros-jade-ros-control
 
 # Configure Catkin Workspace
 source /opt/ros/jade/setup.bash
@@ -78,10 +83,13 @@ gsettings set org.gnome.desktop.screensaver lock-enabled false
 sudo apt-get -y install compizconfig-settings-manager
 gsettings set org.gnome.desktop.interface enable-animations false
 gsettings set com.canonical.Unity.Lenses remote-content-search none
-timedatectl set-timezone America/Los_Angeles
-echo '[SeatDefaults]\\nautologin-user=ubuntu' > login_file; sudo mv login_file /etc/lightdm/lightdm.conf
+echo '[SeatDefaults]\nautologin-user=ubuntu' > login_file; sudo mv login_file /etc/lightdm/lightdm.conf
 gsettings set org.gnome.Vino enabled true
 gsettings set org.gnome.Vino disable-background true
 gsettings set org.gnome.Vino prompt-enabled false
 gsettings set org.gnome.Vino require-encryption false
+
 echo "alias sr='source ~/catkin_ws/devel/setup.bash'" >> ~/.bashrc
+
+cd ~/catkin_ws
+catkin_make && source devel/setup.sh

@@ -16,7 +16,7 @@ In addition, you will need:
 
 ## Preparing the Jetson Board
 
-* Plug one end of the ethernet cable in Jetson board and plug the other end into the router
+* Plug one end of the ethernet cable into the Jetson board and plug the other end into the router
 * Do not plug in power adapter just yet (you will plug in power during the OS flash step)
 
 ## Running JetPack
@@ -69,7 +69,7 @@ Once the install is complete, you can go ahead and disconnect the micro USB cabl
 
 * Make the ROS workspace directory
 
-  `mkdir -p catkin_ws/src; cd catkin_ws/src`
+  `mkdir -p ~/catkin_ws/src; cd ~/catkin_ws/src`
 
 * Clone this repository into the workspace
 
@@ -77,6 +77,6 @@ Once the install is complete, you can go ahead and disconnect the micro USB cabl
 
 * Run the ros configuration script
 
-  `rosjet/rosjet_install.sh`
+  `./rosjet/rosjet_install.sh`
 
 * Configuration of the Jetson is now complete; reboot the Jetson board before continuing.
