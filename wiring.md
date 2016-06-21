@@ -9,4 +9,5 @@ This file describes how to solder and connect the wires
 
 ## Wiring Overview
 
-![](static/wiring/schematic.png)
+![](static/wiring/schematic_small.png)
+[Enlarge Image](static/wiring/schematic.png)
