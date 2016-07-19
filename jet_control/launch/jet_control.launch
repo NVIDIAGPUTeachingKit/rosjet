@@ -12,7 +12,7 @@
     respawn="false" output="screen">
   </node>
 
-  <node name="cmdvel_relay" pkg="topic_tools" type="relay" args="cmd_vel jet_drive_controller/cmd_vel"/>
-  <node name="odom_relay" pkg="topic_tools" type="relay" args="jet_drive_controller/odom odom"/>
+  <node name="cmdvelrelay" pkg="topic_tools" type="relay" args="/cmd_vel /jet_drive_controller/cmd_vel"/>
+  <node name="odomrelay" pkg="topic_tools" type="relay" args="/jet_drive_controller/odom /odom"/>
 
 </launch>

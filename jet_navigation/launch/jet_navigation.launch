@@ -1,0 +1,46 @@
+<launch>
+  <arg name="delta_x" default="0.0"/>
+  <arg name="delta_y" default="0.0"/>
+  <arg name="stationary" default="true"/>
+  <arg name="map_file"/>
+
+  <include file="$(find jet_bringup)/launch/jet_gazebo.launch"/>
+
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+
+  <group if="$(arg stationary)">
+    <node name="stationary_controller" pkg="jet_navigation" type="stationary_controller"/>
+  </group>
+
+  <node name="fakeodom_relay" pkg="topic_tools" type="relay" args="odom base_pose_ground_truth"/>
+  <node name="fake_localization" pkg="fake_localization" type="fake_localization">
+    <param name="delta_x" value="$(arg delta_x)"/>
+    <param name="delta_y" value="$(arg delta_y)"/>
+  </node>
+
+
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <rosparam file="$(find jet_navigation)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find jet_navigation)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find jet_navigation)/param/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find jet_navigation)/param/global_costmap_params.yaml" command="load" />
+    <!--<rosparam file="$(find turtlebot_navigation)/param/dwa_local_planner_params.yaml" command="load" />
+    <rosparam file="$(find turtlebot_navigation)/param/move_base_params.yaml" command="load" />
+    <rosparam file="$(find turtlebot_navigation)/param/global_planner_params.yaml" command="load" />
+    <rosparam file="$(find turtlebot_navigation)/param/navfn_global_planner_params.yaml" command="load" />
+
+    <rosparam file="$(arg custom_param_file)" command="load" />
+
+    <param name="global_costmap/global_frame" value="$(arg global_frame_id)"/>
+    <param name="global_costmap/robot_base_frame" value="$(arg base_frame_id)"/>
+    <param name="local_costmap/global_frame" value="$(arg odom_frame_id)"/>
+    <param name="local_costmap/robot_base_frame" value="$(arg base_frame_id)"/>
+    <param name="DWAPlannerROS/global_frame_id" value="$(arg odom_frame_id)"/>
+
+    <remap from="cmd_vel" to="navigation_velocity_smoother/raw_cmd_vel"/>
+    <remap from="odom" to="$(arg odom_topic)"/>
+    <remap from="scan" to="$(arg laser_topic)"/>-->
+    <param name="base_global_planner" value="global_planner/GlobalPlanner"/>
+  </node>
+
+</launch>

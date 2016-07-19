@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package>
+  <name>jet_navigation</name>
+  <version>0.0.0</version>
+  <description>The jet_navigation package</description>
+
+  <maintainer email="jkerfs@calpoly.edu">jeremy</maintainer>
+
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>controller_manager</build_depend>
+  <build_depend>hardware_interface</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>rospy</build_depend>
+  <run_depend>controller_manager</run_depend>
+  <run_depend>hardware_interface</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>rospy</run_depend>
+
+  <export>
+  </export>
+</package>
