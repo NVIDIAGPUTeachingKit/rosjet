@@ -1,7 +1,7 @@
 ---
 layout: page
 title: rosjet
-tagline: NVIDIA Robot Teaching Kit with Jet
+tagline: NVIDIA Jet Robot
 ---
 {% include JB/setup %}
 
