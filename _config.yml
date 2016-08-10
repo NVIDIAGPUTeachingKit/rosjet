@@ -8,9 +8,9 @@ exclude: [".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md"]
 # so be sure to set them if your theme uses them.
 #
 title : rosjet
-tagline: NVIDIA Robot Teaching Kit with Jet
+tagline: NVIDIA Jet Robot
 author :
-  name : Name Lastname
+  name : Jeremy Kerfs
   email : blah@email.test
   github : username
   twitter : username
