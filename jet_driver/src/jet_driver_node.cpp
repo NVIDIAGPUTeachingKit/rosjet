@@ -12,8 +12,14 @@
 class JetRobot : public hardware_interface::RobotHW
 {
 public:
+  double velocity_multiplier;
   JetRobot(ros::NodeHandle nh)
   {
+    ros::NodeHandle pnh("~");
+
+    pnh.param<double>("velocity_multiplier", velocity_multiplier, 10.0);
+    ROS_INFO("velocity multiplier: %f", velocity_multiplier);
+
     hardware_interface::JointStateHandle state_handle_left("left_wheel_joint", &pos[0], &vel[0], &eff[0]);
     jnt_state_interface.registerHandle(state_handle_left);
 
@@ -44,16 +50,16 @@ public:
     encoder_right = val->data;
   }
   void read() {
-    left_msg.data = (int)(400 * cmd[0]);
-    right_msg.data = (int)(400 * cmd[1]);
+    left_msg.data = (int)(velocity_multiplier * cmd[0]);
+    right_msg.data = (int)(velocity_multiplier * cmd[1]);
     motor_left_pub.publish(left_msg);
     motor_right_pub.publish(right_msg);
   }
   void write() {
     vel[0] = REVOLUTIONS_PER_TICK * (encoder_left - prev_left) / getPeriod().toSec();
     vel[1] = REVOLUTIONS_PER_TICK * (encoder_right - prev_right) / getPeriod().toSec();
-    pos[0] = REVOLUTIONS_PER_TICK * (encoder_left - prev_left);
-    pos[1] = REVOLUTIONS_PER_TICK * (encoder_right - prev_right);
+    pos[0] += REVOLUTIONS_PER_TICK * (encoder_left - prev_left);
+    pos[1] += REVOLUTIONS_PER_TICK * (encoder_right - prev_right);
     prev_left = encoder_left;
     prev_right = encoder_right;
   }
