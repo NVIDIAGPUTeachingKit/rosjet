@@ -15,6 +15,7 @@ public:
   double velocity_multiplier;
   JetRobot(ros::NodeHandle nh)
   {
+
     ros::NodeHandle pnh("~");
 
     pnh.param<double>("velocity_multiplier", velocity_multiplier, 10.0);
@@ -40,14 +41,22 @@ public:
     motor_right_pub = nh.advertise<std_msgs::Int16>("/arduino/motor_right_speed",10);
     encoder_left_sub = nh.subscribe<std_msgs::UInt64>("/arduino/encoder_left_value", 10, &JetRobot::leftEncoderCB, this);
     encoder_right_sub = nh.subscribe<std_msgs::UInt64>("/arduino/encoder_right_value", 10, &JetRobot::rightEncoderCB, this);
+
+
+    prev_left = 0;
+    prev_right = 0;
+    encoder_left = 0;
+    encoder_right = 0;
+    pos[0] = 0;
+    pos[1] = 0;
   }
   ros::Time getTime() const {return ros::Time::now();}
   ros::Duration getPeriod() const{return ros::Duration(0.01);}
   void leftEncoderCB(const std_msgs::UInt64::ConstPtr& val) {
-    encoder_left = val->data;
+    encoder_left = (double)val->data;
   }
   void rightEncoderCB(const std_msgs::UInt64::ConstPtr& val) {
-    encoder_right = val->data;
+    encoder_right = (double)val->data;
   }
   void read() {
     left_msg.data = (int)(velocity_multiplier * cmd[0]);
@@ -72,7 +81,7 @@ private:
   double eff[2];
   double cmd[2];
   std_msgs::Int16 left_msg, right_msg;
-  unsigned long encoder_left, encoder_right, prev_left, prev_right;
+  double encoder_left, encoder_right, prev_left, prev_right;
   ros::Publisher motor_left_pub;
   ros::Publisher motor_right_pub;
   ros::Subscriber encoder_left_sub;

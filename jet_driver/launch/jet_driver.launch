@@ -1,4 +1,4 @@
 <?xml version="1.0"?>
 <launch>
-  <node name="jet_driver_node" pkg="jet_driver" type="jet_driver_node"/>
+  <node name="jet_driver_node" pkg="jet_driver" type="jet_driver_node" output="screen"/>
 </launch>
